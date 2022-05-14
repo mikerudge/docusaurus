@@ -18,7 +18,8 @@ const baseConfig: DocusaurusConfig = {
   url: 'https://mysite.com',
 };
 
-const normalizeConfig = (config) => validateConfig({...baseConfig, ...config});
+const normalizeConfig = (config) =>
+  validateConfig({...baseConfig, ...config}, 'docusaurus.config.js');
 
 describe('normalizeConfig', () => {
   it('normalizes empty config', () => {
@@ -289,13 +290,16 @@ describe('normalizeConfig', () => {
 
   it('throws error for required fields', () => {
     expect(() =>
-      validateConfig({
-        invalidField: true,
-        presets: {},
-        stylesheets: {},
-        themes: {},
-        scripts: {},
-      }),
+      validateConfig(
+        {
+          invalidField: true,
+          presets: {},
+          stylesheets: {},
+          themes: {},
+          scripts: {},
+        },
+        'docusaurus.config.js',
+      ),
     ).toThrowErrorMatchingSnapshot();
   });
 });

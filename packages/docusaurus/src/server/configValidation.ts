@@ -5,10 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import {
-  DEFAULT_CONFIG_FILE_NAME,
-  DEFAULT_STATIC_DIR_NAME,
-} from '@docusaurus/utils';
+import {DEFAULT_STATIC_DIR_NAME} from '@docusaurus/utils';
 import {Joi, URISchema, printWarning} from '@docusaurus/utils-validation';
 import type {DocusaurusConfig, I18nConfig} from '@docusaurus/types';
 
@@ -239,6 +236,7 @@ export const ConfigSchema = Joi.object({
 // TODO move to @docusaurus/utils-validation
 export function validateConfig(
   config: Partial<DocusaurusConfig>,
+  siteConfigPath: string,
 ): DocusaurusConfig {
   const {error, warning, value} = ConfigSchema.validate(config, {
     abortEarly: false,
@@ -261,7 +259,7 @@ export function validateConfig(
       '',
     );
     formattedError = unknownFields
-      ? `${formattedError}These field(s) (${unknownFields}) are not recognized in ${DEFAULT_CONFIG_FILE_NAME}.\nIf you still want these fields to be in your configuration, put them in the "customFields" field.\nSee https://docusaurus.io/docs/api/docusaurus-config/#customfields`
+      ? `${formattedError}These field(s) (${unknownFields}) are not recognized in ${siteConfigPath}.\nIf you still want these fields to be in your configuration, put them in the "customFields" field.\nSee https://docusaurus.io/docs/api/docusaurus-config/#customfields`
       : formattedError;
     throw new Error(formattedError);
   } else {
