@@ -6,6 +6,7 @@
  */
 
 import {createStorageSlot} from '@docusaurus/theme-common';
+import renderReloadPopup from './renderReloadPopup';
 
 declare global {
   namespace NodeJS {
@@ -18,7 +19,6 @@ declare global {
 // First: read the env variables (provided by Webpack)
 /* eslint-disable prefer-destructuring */
 const PWA_SERVICE_WORKER_URL = process.env.PWA_SERVICE_WORKER_URL;
-const PWA_RELOAD_POPUP = process.env.PWA_RELOAD_POPUP;
 const PWA_OFFLINE_MODE_ACTIVATION_STRATEGIES =
   process.env.PWA_OFFLINE_MODE_ACTIVATION_STRATEGIES;
 const PWA_DEBUG = process.env.PWA_DEBUG;
@@ -178,9 +178,8 @@ async function registerSW() {
     // Immediately load new service worker when files aren't cached
     if (!offlineMode) {
       sendSkipWaiting();
-    } else if (PWA_RELOAD_POPUP) {
-      const renderReloadPopup = (await import('./renderReloadPopup')).default;
-      await renderReloadPopup({
+    } else {
+      renderReloadPopup({
         onReload() {
           wb.addEventListener('controlling', () => {
             window.location.reload();
